@@ -94,6 +94,7 @@ void write_to_result_file() {
             fout << output[i][j];
         }
     }
+    fout << std::endl;
 }
 int main() {
     read_to_input();
