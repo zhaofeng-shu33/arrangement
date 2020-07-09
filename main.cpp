@@ -5,7 +5,8 @@
 
 int input[1000][10];
 int output[10][20];
-std::ofstream fout("result.txt");
+
+
 void initialize_output() {
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 20; j++) {
@@ -36,21 +37,21 @@ bool permissible(int index, int h_p, int v_p) {
             return false;
         if (new_v == 5 || new_v > 9)
             return false;
-        if (output[new_h][new_v] == 1) {
+        if (output[new_h][new_v] > 0) {
             return false;
         }
     }
     return true;
 }
 
-void put_here(int index, int h_p, int v_p) {
+void put_here(int index, int put_index, int h_p, int v_p) {
     for (int i = 0; i < 13; i++) {
         if (shape_info[index][i] == 0) {
             continue;
         }
         int h_delta = i % 4;
         int v_delta = i / 4;
-        output[h_p + h_delta][v_p + v_delta] = 1;
+        output[h_p + h_delta][v_p + v_delta] = put_index;
     }
 }
 //! return true is no permissible is available
@@ -64,7 +65,7 @@ bool get_next_permissible(int index, int& h_p, int& v_p) {
             if (j == 4) {
                 continue;
             }
-            if (permissible(index, h_p, v_p)) {
+            if (permissible(index, i, j)) {
                 h_p = i;
                 v_p = j;
                 return false;
@@ -75,11 +76,13 @@ bool get_next_permissible(int index, int& h_p, int& v_p) {
 }
 
 void compute_one_round(int index) {
+    int put_index = 1;
     for (int i = 0; i < 19; i++) {
         int h_p = 0, v_p = 0;
         for (int j = 0; j < input[index][i]; j++) {
             if (permissible(index, h_p, v_p)) {
-                put_here(index, h_p, v_p);
+                put_here(index, put_index, h_p, v_p);
+                put_index++;
             }
             if (get_next_permissible(index, h_p, v_p)) {
                 break;
@@ -88,19 +91,22 @@ void compute_one_round(int index) {
     }
 }
 
-void write_to_result_file() {
+void write_to_result_file(std::ofstream& fout) {
     for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 20; j++) {
-            fout << output[i][j];
+        for (int j = 0; j < 19; j++) {
+            fout << output[i][j] << ' ';
         }
+        fout << output[i][19] << std::endl;
     }
     fout << std::endl;
 }
+
 int main() {
     read_to_input();
-    initialize_output();
+    std::ofstream fout("result.txt");
     for (int i = 0; i < 1000; i++) {
+        initialize_output();
         compute_one_round(i);
-        write_to_result_file();
+        write_to_result_file(fout);
     }
 }

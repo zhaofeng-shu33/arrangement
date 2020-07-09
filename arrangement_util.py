@@ -12,7 +12,7 @@ def generate_test_case():
                     num = 0
                 else:
                     num = int(new_num)
-                num_list.append(num)
+                num_list.append(str(num))
                 num_sum += num
             if num_sum <= 50:
                 satisfied = False
