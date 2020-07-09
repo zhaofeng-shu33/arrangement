@@ -96,5 +96,10 @@ void write_to_result_file() {
     }
 }
 int main() {
-
+    read_to_input();
+    initialize_output();
+    for (int i = 0; i < 1000; i++) {
+        compute_one_round(i);
+        write_to_result_file();
+    }
 }
