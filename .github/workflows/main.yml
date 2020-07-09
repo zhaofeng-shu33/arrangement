@@ -1,0 +1,22 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: generate the data
+      run: python3 arrangement_util.py
+    - name: compile alg
+      run: g++ main.cpp -o main
+    - name: run
+      run: ./main
+    - name: preserve test_case
+      uses: actions/upload-artifact@v1
+      with:
+        name: test_case
+        path: test_case.txt

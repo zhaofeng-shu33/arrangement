@@ -33,9 +33,9 @@ bool permissible(int index, int h_p, int v_p) {
         int v_delta = i / 4;
         int new_h = h_p + h_delta;
         int new_v = v_p + v_delta;
-        if (new_h == 12 || new_h > 19)
+        if (new_h == 5 || new_h > 9)
             return false;
-        if (new_v == 5 || new_v > 9)
+        if (new_v == 12 || new_v > 19)
             return false;
         if (output[new_h][new_v] > 0) {
             return false;
@@ -56,13 +56,13 @@ void put_here(int index, int put_index, int h_p, int v_p) {
 }
 //! return true is no permissible is available
 bool get_next_permissible(int index, int& h_p, int& v_p) {
-    for (int i = h_p; i < 20; i++) {
-        for (int j = v_p; j < 10; j++) {
+    for (int i = h_p; i < 10; i++) {
+        for (int j = v_p; j < 20; j++) {
             // skip the road
-            if (i == 11) {
+            if (i == 4) {
                 continue;
             }
-            if (j == 4) {
+            if (j == 11) {
                 continue;
             }
             if (permissible(index, i, j)) {
@@ -80,11 +80,11 @@ void compute_one_round(int index) {
     for (int i = 0; i < 19; i++) {
         int h_p = 0, v_p = 0;
         for (int j = 0; j < input[index][i]; j++) {
-            if (permissible(index, h_p, v_p)) {
-                put_here(index, put_index, h_p, v_p);
+            if (permissible(i, h_p, v_p)) {
+                put_here(i, put_index, h_p, v_p);
                 put_index++;
             }
-            if (get_next_permissible(index, h_p, v_p)) {
+            if (get_next_permissible(i, h_p, v_p)) {
                 break;
             }
         }
